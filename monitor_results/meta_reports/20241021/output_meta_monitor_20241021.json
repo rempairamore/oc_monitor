@@ -1,0 +1,59 @@
+{
+    "endpoint": "https://k8s.opencitations.net/meta/sparql",
+    "collection": "OpenCitations Meta",
+    "datetime": "21/10/2024, 19:33:43",
+    "running_time": 2.217046022415161,
+    "config_fp": "meta_monitor_config.json",
+    "monitoring_results": [
+        {
+            "label": "duplicate_br",
+            "description": "A single value for a given external ID scheme (e.g. DOI value) is associated with more than one BR.",
+            "run": {
+                "got_result": true,
+                "running_time": 1.0042486190795898,
+                "error": null
+            },
+            "passed": false
+        },
+        {
+            "label": "multiple_id_values",
+            "description": "BRs have 2 or more values for at least one of their supported ID schemes (e.g. 2 DOIs for a single journal article).",
+            "run": {
+                "got_result": true,
+                "running_time": 0.6263129711151123,
+                "error": null
+            },
+            "passed": false
+        },
+        {
+            "label": "duplicate_agent",
+            "description": "Multiple foaf:Agent entities have the same ID value for any given scheme (e.g. different authors have the same ORCID).",
+            "run": {
+                "got_result": true,
+                "running_time": 0.13369393348693848,
+                "error": null
+            },
+            "passed": false
+        },
+        {
+            "label": "multiple_manifestations",
+            "description": "There are BRs that are embodied in multiple fabio:Manifestation entities.",
+            "run": {
+                "got_result": true,
+                "running_time": 0.22804498672485352,
+                "error": null
+            },
+            "passed": false
+        },
+        {
+            "label": "br_in_multiple_venues",
+            "description": "There are BRs that (wrongly) appear to be contained in different venues (e.g. journals).",
+            "run": {
+                "got_result": true,
+                "running_time": 0.21254611015319824,
+                "error": null
+            },
+            "passed": false
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "endpoint": "https://k8s.opencitations.net/index/sparql",
+    "collection": "OpenCitations Index",
+    "datetime": "21/10/2024, 19:33:45",
+    "running_time": 0.15534663200378418,
+    "config_fp": "index_monitor_config.json",
+    "monitoring_results": [
+        {
+            "label": "circular_citation",
+            "description": "The same entity appears as both citing and cited entity for the same Citation.",
+            "run": {
+                "got_result": true,
+                "running_time": 0.15534663200378418,
+                "error": null
+            },
+            "passed": false
+        }
+    ]
+}

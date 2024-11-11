@@ -1,0 +1,59 @@
+{
+    "endpoint": "https://k8s.opencitations.net/meta/sparql",
+    "collection": "OpenCitations Meta",
+    "datetime": "31/10/2024, 09:31:04",
+    "running_time": 214.55331158638,
+    "config_fp": "meta_monitor_config.json",
+    "monitoring_results": [
+        {
+            "label": "duplicate_br",
+            "description": "There is at least one case of multiple fabio:Expression entities sharing the same ID value for any given scheme (e.g. the same DOI is linked to 2 separate journal articles.",
+            "run": {
+                "got_result": true,
+                "running_time": 3.835306167602539,
+                "error": null
+            },
+            "passed": false
+        },
+        {
+            "label": "multiple_id_values",
+            "description": "There are more than 10000 BRs that have 2 or more values for at least one of their supported ID schemes (e.g. 2 DOIs for a single journal article).",
+            "run": {
+                "got_result": true,
+                "running_time": 193.0164041519165,
+                "error": null
+            },
+            "passed": false
+        },
+        {
+            "label": "duplicate_agent",
+            "description": "There is at least one case of multiple foaf:Agent entities sharing the same ID value for any given scheme (e.g. different authors have the same ORCID).",
+            "run": {
+                "got_result": true,
+                "running_time": 0.36613893508911133,
+                "error": null
+            },
+            "passed": false
+        },
+        {
+            "label": "multiple_manifestations",
+            "description": "There are more than 15 BRs that are embodied in multiple fabio:Manifestation entities.",
+            "run": {
+                "got_result": true,
+                "running_time": 6.292587518692017,
+                "error": null
+            },
+            "passed": true
+        },
+        {
+            "label": "br_in_multiple_venues",
+            "description": "There are more than 1000 BRs that (wrongly) appear to be contained in different venues (e.g. journals).",
+            "run": {
+                "got_result": true,
+                "running_time": 11.042874813079834,
+                "error": null
+            },
+            "passed": false
+        }
+    ]
+}

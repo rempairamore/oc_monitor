@@ -1,0 +1,7 @@
+# project settings and compiled python files
+.idea
+__pycache__
+.vscode/
+
+#build package
+dist/
