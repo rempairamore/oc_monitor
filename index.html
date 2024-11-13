@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenCitations Data Quality Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .info-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .info-section p {
+            margin: 8px 0;
+            color: #444;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f8f8;
+        }
+        .passed {
+            color: green;
+        }
+        .failed {
+            color: red;
+        }
+        .error {
+            color: orange;
+        }
+        .null {
+            color: #999;
+        }
+        .timestamp {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OpenCitations Data Quality Monitor</h1>
+        
+        <div class="section">
+            <h2>Meta Monitor Results</h2>
+            <div class="info-section">
+                
+            <p>Collection:</p>
+            <p>Endpoint:</p>
+            <p>Date and Time:</p>
+            <p>Total Running Time:</p>
+        
+            </div>
+            <table>
+<tr>
+<th>Label</th>
+<th>Issue Description</th>
+<th>Test result</th>
+<th>Running Time (seconds)</th>
+<th>Raised Error</th>
+</tr>
+<tr>
+<td>duplicate_br</td>
+<td>There is at least one case of multiple fabio:Expression entities sharing the same ID value for any given scheme (e.g. the same DOI is linked to 2 separate journal articles, as in https://opencitations.net/meta/api/v1/metadata/omid:br/061103623233 and https://opencitations.net/meta/api/v1/metadata/omid:br/061602208852).</td>
+<td><span class="failed">Failed</span></td>
+<td>2.413</td>
+<td><span class="null">-</span></td>
+</tr>
+<tr>
+<td>multiple_id_values</td>
+<td>There are more than 10,000 BRs that have 2 or more values for at least one of their supported ID schemes (e.g. 2 DOIs for a single journal article, as in https://opencitations.net/meta/api/v1/metadata/omid:br/06120410820).</td>
+<td><span class="failed">Failed</span></td>
+<td>178.961</td>
+<td><span class="null">-</span></td>
+</tr>
+<tr>
+<td>duplicate_agent</td>
+<td>There is at least one case of multiple foaf:Agent entities sharing the same ID value for any given scheme (e.g. different authors have the same ORCID, as for the authors of https://opencitations.net/meta/api/v1/metadata/omid:br/061702782637).</td>
+<td><span class="failed">Failed</span></td>
+<td>0.668</td>
+<td><span class="null">-</span></td>
+</tr>
+<tr>
+<td>multiple_manifestations</td>
+<td>There are more than 15 BRs that are embodied in multiple fabio:Manifestation entities (e.g. https://opencitations.net/meta/br/062503856318.html).</td>
+<td><span class="passed">Passed</span></td>
+<td>6.436</td>
+<td><span class="null">-</span></td>
+</tr>
+<tr>
+<td>br_in_multiple_venues</td>
+<td>There are more than 1,000 BRs that (wrongly) appear to be contained in different venues (e.g. the journal article described at https://test.opencitations.net/meta/api/v1/metadata/omid:br/0603904064).</td>
+<td><span class="failed">Failed</span></td>
+<td>10.798</td>
+<td><span class="null">-</span></td>
+</tr>
+</table>
+        </div>
+
+        <div class="section">
+            <h2>Index Monitor Results</h2>
+            <div class="info-section">
+                
+            <p>Collection:</p>
+            <p>Endpoint:</p>
+            <p>Date and Time:</p>
+            <p>Total Running Time:</p>
+        
+            </div>
+            <table>
+<tr>
+<th>Label</th>
+<th>Issue Description</th>
+<th>Test result</th>
+<th>Running Time (seconds)</th>
+<th>Raised Error</th>
+</tr>
+<tr>
+<td>circular_citation</td>
+<td>The same entity appears as both citing and cited entity for the same Citation.</td>
+<td><span class="failed">Failed</span></td>
+<td>0.544</td>
+<td><span class="null">-</span></td>
+</tr>
+</table>
+        </div>
+
+        <div class="timestamp">
+            Last updated: 13/11/2024, 10:08:06
+        </div>
+    </div>
+</body>
+</html>
