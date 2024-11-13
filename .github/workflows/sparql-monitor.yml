@@ -42,60 +42,50 @@ jobs:
         from datetime import datetime
         from bs4 import BeautifulSoup
         import glob
-        import json
 
-        def find_latest_files(base_path, html_pattern):
+        def find_latest_html(base_path, pattern):
             date_dirs = sorted(os.listdir(base_path))
             if not date_dirs:
                 raise Exception(f"No directories found in {base_path}")
             latest_dir = date_dirs[-1]
             
-            # Trova il file HTML più recente
-            html_pattern_path = os.path.join(base_path, latest_dir, html_pattern)
-            html_files = glob.glob(html_pattern_path)
+            html_files = glob.glob(os.path.join(base_path, latest_dir, pattern))
             if not html_files:
-                raise Exception(f"No HTML files matching {html_pattern} found in {os.path.join(base_path, latest_dir)}")
-            html_file = sorted(html_files)[-1]
-            
-            # Determina il nome del file JSON corrispondente
-            base_name = os.path.basename(html_file)
-            json_name = base_name.replace('_vis.html', '.json')
-            json_file = os.path.join(base_path, latest_dir, json_name.replace('meta_monitor', 'output_meta_monitor').replace('index_monitor', 'output_index_monitor'))
-            
-            if not os.path.exists(json_file):
-                raise Exception(f"JSON file not found: {json_file}")
-                
-            print(f"Found HTML: {html_file}")
-            print(f"Found JSON: {json_file}")
-            
-            return html_file, json_file
+                raise Exception(f"No HTML files matching {pattern} found in {os.path.join(base_path, latest_dir)}")
+            return sorted(html_files)[-1]
 
-        def extract_content(html_file, json_file):
-            # Estrai la tabella dall'HTML
+        def extract_content(html_file):
             with open(html_file, 'r') as f:
                 html_content = f.read()
                 soup = BeautifulSoup(html_content, 'html.parser')
+                
+                # Estrai la tabella
                 table = str(soup.find('table'))
-            
-            # Leggi i dati dal JSON
-            with open(json_file, 'r') as jf:
-                data = json.load(jf)
-            
-            info = f"""
-                <p><strong>Collection:</strong> {data.get('collection', 'N/A')}</p>
-                <p><strong>Endpoint:</strong> {data.get('endpoint', 'N/A')}</p>
-                <p><strong>Date and Time:</strong> {data.get('datetime', 'N/A')}</p>
-                <p><strong>Total Running Time:</strong> {round(data.get('running_time', 0), 3)} seconds</p>
-            """
-            return info, table
+                
+                # Estrai le informazioni dal body
+                collection = soup.find(text=lambda t: "Collection:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Collection:" in str(t)) else "N/A"
+                endpoint = soup.find(text=lambda t: "Endpoint:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Endpoint:" in str(t)) else "N/A"
+                datetime_info = soup.find(text=lambda t: "Date and Time:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Date and Time:" in str(t)) else "N/A"
+                runtime = soup.find(text=lambda t: "Total Running Time:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Total Running Time:" in str(t)) else "N/A"
+                
+                info = f"""
+                    <p>{collection}</p>
+                    <p>{endpoint}</p>
+                    <p>{datetime_info}</p>
+                    <p>{runtime}</p>
+                """
+                return info, table
 
-        # Trova i file più recenti
-        meta_html, meta_json = find_latest_files('monitor_results/meta_reports', 'meta_monitor_vis*.html')
-        index_html, index_json = find_latest_files('monitor_results/index_reports', 'index_monitor_vis*.html')
+        # Trova i file HTML più recenti
+        meta_file = find_latest_html('monitor_results/meta_reports', 'meta_monitor_vis*.html')
+        index_file = find_latest_html('monitor_results/index_reports', 'index_monitor_vis*.html')
+
+        print(f"Found meta file: {meta_file}")
+        print(f"Found index file: {index_file}")
 
         # Estrai i contenuti
-        meta_info, meta_table = extract_content(meta_html, meta_json)
-        index_info, index_table = extract_content(index_html, index_json)
+        meta_info, meta_table = extract_content(meta_file)
+        index_info, index_table = extract_content(index_file)
 
         html = f"""<!DOCTYPE html>
         <html lang="en">
