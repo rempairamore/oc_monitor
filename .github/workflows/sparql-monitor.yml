@@ -62,17 +62,29 @@ jobs:
                 # Estrai la tabella
                 table = str(soup.find('table'))
                 
-                # Estrai le informazioni dal body
-                collection = soup.find(text=lambda t: "Collection:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Collection:" in str(t)) else "N/A"
-                endpoint = soup.find(text=lambda t: "Endpoint:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Endpoint:" in str(t)) else "N/A"
-                datetime_info = soup.find(text=lambda t: "Date and Time:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Date and Time:" in str(t)) else "N/A"
-                runtime = soup.find(text=lambda t: "Total Running Time:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Total Running Time:" in str(t)) else "N/A"
+                # Estrai le informazioni dal body usando la struttura esatta dell'HTML
+                paragraphs = soup.find_all('p')
+                collection = ""
+                endpoint = ""
+                datetime_info = ""
+                runtime = ""
                 
+                for p in paragraphs:
+                    text = p.get_text()
+                    if "Collection:" in text:
+                        collection = text.replace("Collection:", "").strip()
+                    elif "Endpoint:" in text:
+                        endpoint = text.replace("Endpoint:", "").strip()
+                    elif "Date and Time:" in text:
+                        datetime_info = text.replace("Date and Time:", "").strip()
+                    elif "Total Running Time:" in text:
+                        runtime = text.replace("Total Running Time:", "").strip()
+                        
                 info = f"""
-                    <p><strong>Collection:</strong> {collection.replace('Collection:', '').strip()}</p>
-                    <p><strong>Endpoint:</strong> {endpoint.replace('Endpoint:', '').strip()}</p>
-                    <p><strong>Date and Time:</strong> {datetime_info.replace('Date and Time:', '').strip()}</p>
-                    <p><strong>Total Running Time:</strong> {runtime.replace('Total Running Time:', '').strip()}</p>
+                    <p><strong>Collection:</strong> {collection}</p>
+                    <p><strong>Endpoint:</strong> {endpoint}</p>
+                    <p><strong>Date and Time:</strong> {datetime_info}</p>
+                    <p><strong>Total Running Time:</strong> {runtime}</p>
                 """
                 return info, table
 
