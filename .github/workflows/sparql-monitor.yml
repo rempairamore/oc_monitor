@@ -41,21 +41,36 @@ jobs:
         import os
         from datetime import datetime
         from bs4 import BeautifulSoup
+        import glob
+
+        def find_latest_html(base_path, pattern):
+            # Trova l'ultima cartella con data
+            date_dirs = sorted(os.listdir(base_path))
+            if not date_dirs:
+                raise Exception(f"No directories found in {base_path}")
+            latest_dir = date_dirs[-1]
+            
+            # Trova il file HTML più recente nella cartella
+            html_files = glob.glob(os.path.join(base_path, latest_dir, pattern))
+            if not html_files:
+                raise Exception(f"No HTML files matching {pattern} found in {os.path.join(base_path, latest_dir)}")
+            return sorted(html_files)[-1]
 
         # Trova gli ultimi report HTML
-        meta_dir = 'monitor_results/meta_reports'
-        index_dir = 'monitor_results/index_reports'
-        latest_meta = sorted(os.listdir(meta_dir))[-1]
-        latest_index = sorted(os.listdir(index_dir))[-1]
+        meta_file = find_latest_html('monitor_results/meta_reports', 'meta_monitor_vis*.html')
+        index_file = find_latest_html('monitor_results/index_reports', 'index_monitor_vis*.html')
+
+        print(f"Found meta file: {meta_file}")
+        print(f"Found index file: {index_file}")
 
         # Estrai le tabelle dai report HTML
         def extract_table(filepath):
             with open(filepath, 'r') as f:
                 soup = BeautifulSoup(f, 'html.parser')
-                return str(soup.find('table'))  # Estrae solo il tag table
+                return str(soup.find('table'))
 
-        meta_table = extract_table(f"{meta_dir}/{latest_meta}/meta_monitor_vis*.html")
-        index_table = extract_table(f"{index_dir}/{latest_index}/index_monitor_vis*.html")
+        meta_table = extract_table(meta_file)
+        index_table = extract_table(index_file)
 
         # Template HTML personalizzato
         html = f"""<!DOCTYPE html>
