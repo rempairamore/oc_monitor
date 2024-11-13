@@ -44,26 +44,43 @@ jobs:
         import glob
         import json
 
-        def find_latest_html(base_path, pattern):
+        def find_latest_files(base_path, html_pattern):
             date_dirs = sorted(os.listdir(base_path))
             if not date_dirs:
                 raise Exception(f"No directories found in {base_path}")
             latest_dir = date_dirs[-1]
-            html_files = glob.glob(os.path.join(base_path, latest_dir, pattern))
+            
+            # Trova il file HTML più recente
+            html_pattern_path = os.path.join(base_path, latest_dir, html_pattern)
+            html_files = glob.glob(html_pattern_path)
             if not html_files:
-                raise Exception(f"No HTML files matching {pattern} found in {os.path.join(base_path, latest_dir)}")
-            return sorted(html_files)[-1]
+                raise Exception(f"No HTML files matching {html_pattern} found in {os.path.join(base_path, latest_dir)}")
+            html_file = sorted(html_files)[-1]
+            
+            # Determina il nome del file JSON corrispondente
+            base_name = os.path.basename(html_file)
+            json_name = base_name.replace('_vis.html', '.json')
+            json_file = os.path.join(base_path, latest_dir, json_name.replace('meta_monitor', 'output_meta_monitor').replace('index_monitor', 'output_index_monitor'))
+            
+            if not os.path.exists(json_file):
+                raise Exception(f"JSON file not found: {json_file}")
+                
+            print(f"Found HTML: {html_file}")
+            print(f"Found JSON: {json_file}")
+            
+            return html_file, json_file
 
-        def extract_content(filepath):
-            with open(filepath, 'r') as f:
+        def extract_content(html_file, json_file):
+            # Estrai la tabella dall'HTML
+            with open(html_file, 'r') as f:
                 html_content = f.read()
                 soup = BeautifulSoup(html_content, 'html.parser')
                 table = str(soup.find('table'))
-                
-            json_file = filepath.replace('_vis.html', '.json')
+            
+            # Leggi i dati dal JSON
             with open(json_file, 'r') as jf:
                 data = json.load(jf)
-                
+            
             info = f"""
                 <p><strong>Collection:</strong> {data.get('collection', 'N/A')}</p>
                 <p><strong>Endpoint:</strong> {data.get('endpoint', 'N/A')}</p>
@@ -72,14 +89,13 @@ jobs:
             """
             return info, table
 
-        meta_file = find_latest_html('monitor_results/meta_reports', 'meta_monitor_vis*.html')
-        index_file = find_latest_html('monitor_results/index_reports', 'index_monitor_vis*.html')
+        # Trova i file più recenti
+        meta_html, meta_json = find_latest_files('monitor_results/meta_reports', 'meta_monitor_vis*.html')
+        index_html, index_json = find_latest_files('monitor_results/index_reports', 'index_monitor_vis*.html')
 
-        print(f"Found meta file: {meta_file}")
-        print(f"Found index file: {index_file}")
-
-        meta_info, meta_table = extract_content(meta_file)
-        index_info, index_table = extract_content(index_file)
+        # Estrai i contenuti
+        meta_info, meta_table = extract_content(meta_html, meta_json)
+        index_info, index_table = extract_content(index_html, index_json)
 
         html = f"""<!DOCTYPE html>
         <html lang="en">
