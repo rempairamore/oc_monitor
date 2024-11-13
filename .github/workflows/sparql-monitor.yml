@@ -202,16 +202,24 @@ jobs:
 
     - name: Push index.html to gitwebsite branch
       run: |
-        # Salva una copia di index.html
+        # Salva una copia di index.html e CNAME
         cp index.html /tmp/index.html
+        if [ -f CNAME ]; then
+          cp CNAME /tmp/CNAME
+        fi
         
         # Crea e resetta il branch gitwebsite
         git checkout --orphan gitwebsite-temp
         git rm -rf .
         git clean -fd
         
-        # Ripristina index.html e committalo
+        # Ripristina index.html e CNAME
         cp /tmp/index.html index.html
+        if [ -f /tmp/CNAME ]; then
+          cp /tmp/CNAME CNAME
+          git add CNAME
+        fi
+        
         git add index.html
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
