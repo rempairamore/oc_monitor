@@ -202,31 +202,19 @@ jobs:
 
     - name: Push index.html to gitwebsite branch
       run: |
-        # Salva una copia di index.html e CNAME
-        cp index.html /tmp/index.html
-        if [ -f CNAME ]; then
-          cp CNAME /tmp/CNAME
-        fi
-        
-        # Crea e resetta il branch gitwebsite
-        git checkout --orphan gitwebsite-temp
-        git rm -rf .
-        git clean -fd
-        
-        # Ripristina index.html e CNAME
-        cp /tmp/index.html index.html
-        if [ -f /tmp/CNAME ]; then
-          cp /tmp/CNAME CNAME
-          git add CNAME
-        fi
-        
-        git add index.html
+        # Configura git
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
+        
+        # Checkout del branch gitwebsite
+        git fetch origin gitwebsite
+        git checkout gitwebsite
+        
+        # Aggiorna solo index.html
+        cp index.html .
+        git add index.html
         git commit -m "Update website [automated]"
-        git branch -D gitwebsite || true
-        git branch -m gitwebsite
-        git push -f origin gitwebsite
+        git push origin gitwebsite
 
     - name: Upload monitoring results as artifacts
       uses: actions/upload-artifact@v3
