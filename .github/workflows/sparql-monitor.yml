@@ -42,6 +42,7 @@ jobs:
         from datetime import datetime
         from bs4 import BeautifulSoup
         import glob
+        import json
 
         def find_latest_html(base_path, pattern):
             date_dirs = sorted(os.listdir(base_path))
@@ -55,24 +56,27 @@ jobs:
 
         def extract_content(filepath):
             with open(filepath, 'r') as f:
-                soup = BeautifulSoup(f, 'html.parser')
+                html_content = f.read()
+                soup = BeautifulSoup(html_content, 'html.parser')
                 table = str(soup.find('table'))
-                # Estrai le informazioni aggiuntive
-                collection = soup.find(text=lambda t: "Collection:" in str(t)).parent.get_text() if soup.find(text=lambda t: "Collection:" in str(t)) else "N/A"
-                endpoint = soup.find(text=lambda t: "Endpoint:" in str(t)).parent.get_text() if soup.find(text=lambda t: "Endpoint:" in str(t)) else "N/A"
-                datetime_info = soup.find(text=lambda t: "Date and Time:" in str(t)).parent.get_text() if soup.find(text=lambda t: "Date and Time:" in str(t)) else "N/A"
-                runtime = soup.find(text=lambda t: "Total Running Time:" in str(t)).parent.get_text() if soup.find(text=lambda t: "Total Running Time:" in str(t)) else "N/A"
                 
-                info = f"""
-                <p><strong>Collection:</strong> {collection.replace('Collection:', '')}</p>
-                <p><strong>Endpoint:</strong> {endpoint.replace('Endpoint:', '')}</p>
-                <p><strong>Date and Time:</strong> {datetime_info.replace('Date and Time:', '')}</p>
-                <p><strong>Total Running Time:</strong> {runtime.replace('Total Running Time:', '')}</p>
-                """
-                return info, table
+            json_file = filepath.replace('_vis.html', '.json')
+            with open(json_file, 'r') as jf:
+                data = json.load(jf)
+                
+            info = f"""
+                <p><strong>Collection:</strong> {data.get('collection', 'N/A')}</p>
+                <p><strong>Endpoint:</strong> {data.get('endpoint', 'N/A')}</p>
+                <p><strong>Date and Time:</strong> {data.get('datetime', 'N/A')}</p>
+                <p><strong>Total Running Time:</strong> {round(data.get('running_time', 0), 3)} seconds</p>
+            """
+            return info, table
 
         meta_file = find_latest_html('monitor_results/meta_reports', 'meta_monitor_vis*.html')
         index_file = find_latest_html('monitor_results/index_reports', 'index_monitor_vis*.html')
+
+        print(f"Found meta file: {meta_file}")
+        print(f"Found index file: {index_file}")
 
         meta_info, meta_table = extract_content(meta_file)
         index_info, index_table = extract_content(index_file)
