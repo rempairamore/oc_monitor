@@ -44,39 +44,35 @@ jobs:
         import glob
 
         def find_latest_html(base_path, pattern):
+            # Trova l'ultima cartella con data
             date_dirs = sorted(os.listdir(base_path))
             if not date_dirs:
                 raise Exception(f"No directories found in {base_path}")
             latest_dir = date_dirs[-1]
+            
+            # Trova il file HTML più recente nella cartella
             html_files = glob.glob(os.path.join(base_path, latest_dir, pattern))
             if not html_files:
                 raise Exception(f"No HTML files matching {pattern} found in {os.path.join(base_path, latest_dir)}")
             return sorted(html_files)[-1]
 
-        def extract_content(filepath):
-            with open(filepath, 'r') as f:
-                soup = BeautifulSoup(f, 'html.parser')
-                table = str(soup.find('table'))
-                # Estrai le informazioni aggiuntive
-                collection = soup.find(text=lambda t: "Collection:" in str(t)).parent.get_text() if soup.find(text=lambda t: "Collection:" in str(t)) else "N/A"
-                endpoint = soup.find(text=lambda t: "Endpoint:" in str(t)).parent.get_text() if soup.find(text=lambda t: "Endpoint:" in str(t)) else "N/A"
-                datetime_info = soup.find(text=lambda t: "Date and Time:" in str(t)).parent.get_text() if soup.find(text=lambda t: "Date and Time:" in str(t)) else "N/A"
-                runtime = soup.find(text=lambda t: "Total Running Time:" in str(t)).parent.get_text() if soup.find(text=lambda t: "Total Running Time:" in str(t)) else "N/A"
-                
-                info = f"""
-                <p><strong>Collection:</strong> {collection.replace('Collection:', '')}</p>
-                <p><strong>Endpoint:</strong> {endpoint.replace('Endpoint:', '')}</p>
-                <p><strong>Date and Time:</strong> {datetime_info.replace('Date and Time:', '')}</p>
-                <p><strong>Total Running Time:</strong> {runtime.replace('Total Running Time:', '')}</p>
-                """
-                return info, table
-
+        # Trova gli ultimi report HTML
         meta_file = find_latest_html('monitor_results/meta_reports', 'meta_monitor_vis*.html')
         index_file = find_latest_html('monitor_results/index_reports', 'index_monitor_vis*.html')
 
-        meta_info, meta_table = extract_content(meta_file)
-        index_info, index_table = extract_content(index_file)
+        print(f"Found meta file: {meta_file}")
+        print(f"Found index file: {index_file}")
 
+        # Estrai le tabelle dai report HTML
+        def extract_table(filepath):
+            with open(filepath, 'r') as f:
+                soup = BeautifulSoup(f, 'html.parser')
+                return str(soup.find('table'))
+
+        meta_table = extract_table(meta_file)
+        index_table = extract_table(index_file)
+
+        # Template HTML personalizzato
         html = f"""<!DOCTYPE html>
         <html lang="en">
         <head>
@@ -107,16 +103,6 @@ jobs:
                     padding: 20px;
                     border: 1px solid #ddd;
                     border-radius: 4px;
-                }}
-                .info-section {{
-                    margin-bottom: 20px;
-                    padding: 15px;
-                    background-color: #f8f9fa;
-                    border-radius: 4px;
-                }}
-                .info-section p {{
-                    margin: 8px 0;
-                    color: #444;
                 }}
                 table {{
                     width: 100%;
@@ -156,17 +142,11 @@ jobs:
                 
                 <div class="section">
                     <h2>Meta Monitor Results</h2>
-                    <div class="info-section">
-                        {meta_info}
-                    </div>
                     {meta_table}
                 </div>
 
                 <div class="section">
                     <h2>Index Monitor Results</h2>
-                    <div class="info-section">
-                        {index_info}
-                    </div>
                     {index_table}
                 </div>
 
