@@ -69,10 +69,10 @@ jobs:
                 runtime = soup.find(text=lambda t: "Total Running Time:" in str(t)).parent.get_text().strip() if soup.find(text=lambda t: "Total Running Time:" in str(t)) else "N/A"
                 
                 info = f"""
-                    <p>{collection}</p>
-                    <p>{endpoint}</p>
-                    <p>{datetime_info}</p>
-                    <p>{runtime}</p>
+                    <p><strong>Collection:</strong> {collection.replace('Collection:', '').strip()}</p>
+                    <p><strong>Endpoint:</strong> {endpoint.replace('Endpoint:', '').strip()}</p>
+                    <p><strong>Date and Time:</strong> {datetime_info.replace('Date and Time:', '').strip()}</p>
+                    <p><strong>Total Running Time:</strong> {runtime.replace('Total Running Time:', '').strip()}</p>
                 """
                 return info, table
 
