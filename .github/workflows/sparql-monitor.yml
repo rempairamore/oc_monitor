@@ -26,7 +26,6 @@ jobs:
         
     - name: Install dependencies
       run: |
-        timedatectl set-timezone Europe/Rome
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install beautifulsoup4
@@ -38,6 +37,7 @@ jobs:
 
     - name: Create website from HTML reports
       run: |
+        TZ='Europe/Rome'
         python3 << 'EOF'
         import os
         from datetime import datetime
