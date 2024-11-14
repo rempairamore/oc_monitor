@@ -43,6 +43,8 @@ jobs:
         from datetime import datetime
         from bs4 import BeautifulSoup
         import glob
+        os.environ['TZ'] = 'Europe/Rome'
+        time.tzset()
 
         def find_latest_html(base_path, pattern):
             date_dirs = sorted(os.listdir(base_path))
