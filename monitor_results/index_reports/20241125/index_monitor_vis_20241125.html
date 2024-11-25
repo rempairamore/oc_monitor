@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenCitations Index Data Monitor Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #ddd; }
+        .error { color: red; }
+        .passed { color: green; }
+        .failed { color: red; }
+        .null { text-align: center; }
+        td:has(.null) { text-align: center; }
+    </style>
+</head>
+<body>
+
+    <h1>OpenCitations Index Data Monitoring Report</h1>
+    <p><strong>Collection:</strong> OpenCitations Index</p>
+    <p><strong>Endpoint:</strong> <a href="url">https://k8s.opencitations.net/index/sparql</a></p>
+    <p><strong>Date and Time:</strong> 25/11/2024, 03:35:48</p>
+    <p><strong>Total Running Time:</strong> 0.581 seconds</p>
+
+    <h2>Monitoring Results</h2>
+    <table>
+        <tr>
+            <th>Label</th>
+            <th>Issue Description</th>
+            <th>Test result</th>
+            <th>Running Time (seconds)</th>
+            <th>Raised Error</th>
+        </tr>
+        
+                <tr>
+                    <td>circular_citation</td>
+                    <td>The same entity appears as both citing and cited entity for the same Citation.</td>
+                    <td><span class='failed'>Failed</span></td>
+                    <td>0.581</td>
+                    <td><span class='null'>-</span></td>
+                </tr>
+    </table>
+
+</body>
+</html>
