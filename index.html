@@ -81,8 +81,8 @@
                 
             <p><strong>Collection:</strong> OpenCitations Meta</p>
             <p><strong>Endpoint:</strong> https://k8s.opencitations.net/meta/sparql</p>
-            <p><strong>Date and Time:</strong> 01/12/2024, 03:42:40</p>
-            <p><strong>Total Running Time:</strong> 2.411 seconds</p>
+            <p><strong>Date and Time:</strong> 02/12/2024, 03:36:12</p>
+            <p><strong>Total Running Time:</strong> 675.206 seconds</p>
         
             </div>
             <table>
@@ -97,36 +97,36 @@
 <td>duplicate_br</td>
 <td>There is at least one case of multiple fabio:Expression entities sharing the same ID value for any given scheme (e.g. the same DOI is linked to 2 separate journal articles, as in https://opencitations.net/meta/api/v1/metadata/omid:br/061103623233 and https://opencitations.net/meta/api/v1/metadata/omid:br/061602208852).</td>
 <td><span class="null">-</span></td>
-<td>0.567</td>
-<td><span class="error">HTTP Error 503: Service Unavailable</span></td>
+<td>134.534</td>
+<td><span class="error"><urlopen 110]="" [errno="" connection="" error="" out="" timed=""></urlopen></span></td>
 </tr>
 <tr>
 <td>multiple_id_values</td>
 <td>There are more than 10,000 BRs that have 2 or more values for at least one of their supported ID schemes (e.g. 2 DOIs for a single journal article, as in https://opencitations.net/meta/api/v1/metadata/omid:br/06120410820).</td>
 <td><span class="null">-</span></td>
-<td>0.548</td>
-<td><span class="error">HTTP Error 503: Service Unavailable</span></td>
+<td>135.168</td>
+<td><span class="error"><urlopen 110]="" [errno="" connection="" error="" out="" timed=""></urlopen></span></td>
 </tr>
 <tr>
 <td>duplicate_agent</td>
 <td>There is at least one case of multiple foaf:Agent entities sharing the same ID value for any given scheme (e.g. different authors have the same ORCID, as for the authors of https://opencitations.net/meta/api/v1/metadata/omid:br/061702782637).</td>
 <td><span class="null">-</span></td>
-<td>0.497</td>
-<td><span class="error">HTTP Error 503: Service Unavailable</span></td>
+<td>135.168</td>
+<td><span class="error"><urlopen 110]="" [errno="" connection="" error="" out="" timed=""></urlopen></span></td>
 </tr>
 <tr>
 <td>multiple_manifestations</td>
 <td>There are more than 15 BRs that are embodied in multiple fabio:Manifestation entities (e.g. https://opencitations.net/meta/br/062503856318.html).</td>
 <td><span class="null">-</span></td>
-<td>0.485</td>
-<td><span class="error">HTTP Error 503: Service Unavailable</span></td>
+<td>135.168</td>
+<td><span class="error"><urlopen 110]="" [errno="" connection="" error="" out="" timed=""></urlopen></span></td>
 </tr>
 <tr>
 <td>br_in_multiple_venues</td>
 <td>There are more than 1,000 BRs that (wrongly) appear to be contained in different venues (e.g. the journal article described at https://test.opencitations.net/meta/api/v1/metadata/omid:br/0603904064).</td>
 <td><span class="null">-</span></td>
-<td>0.312</td>
-<td><span class="error">HTTP Error 503: Service Unavailable</span></td>
+<td>135.168</td>
+<td><span class="error"><urlopen 110]="" [errno="" connection="" error="" out="" timed=""></urlopen></span></td>
 </tr>
 </table>
         </div>
@@ -137,8 +137,8 @@
                 
             <p><strong>Collection:</strong> OpenCitations Index</p>
             <p><strong>Endpoint:</strong> https://k8s.opencitations.net/index/sparql</p>
-            <p><strong>Date and Time:</strong> 01/12/2024, 03:42:42</p>
-            <p><strong>Total Running Time:</strong> 0.467 seconds</p>
+            <p><strong>Date and Time:</strong> 02/12/2024, 03:47:27</p>
+            <p><strong>Total Running Time:</strong> 135.167 seconds</p>
         
             </div>
             <table>
@@ -153,14 +153,14 @@
 <td>circular_citation</td>
 <td>The same entity appears as both citing and cited entity for the same Citation.</td>
 <td><span class="null">-</span></td>
-<td>0.467</td>
-<td><span class="error">HTTP Error 503: Service Unavailable</span></td>
+<td>135.167</td>
+<td><span class="error"><urlopen 110]="" [errno="" connection="" error="" out="" timed=""></urlopen></span></td>
 </tr>
 </table>
         </div>
 
         <div class="timestamp">
-            Last updated: 01/12/2024, 04:42:43
+            Last updated: 02/12/2024, 04:49:43
         </div>
     </div>
 </body>
